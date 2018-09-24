@@ -1,4 +1,4 @@
 *.pyc
-settings.py
-testing_file.py
+test_file.py
 bot.log
+settings.py
