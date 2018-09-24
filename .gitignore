@@ -1,0 +1,4 @@
+*.pyc
+settings.py
+testing_file.py
+bot.log
