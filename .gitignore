@@ -2,3 +2,5 @@
 test_file.py
 bot.log
 settings.py
+./activate/*
+./env/*

@@ -1,0 +1,5 @@
+python==3.6.5
+selenium==3.14.1
+beautifulsoup4==4.6.3
+#https://www.joecolantonio.com/how-to-install-phantomjs/
+
