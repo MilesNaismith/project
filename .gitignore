@@ -4,3 +4,4 @@ bot.log
 settings.py
 ./activate/*
 ./env/*
+*.log
