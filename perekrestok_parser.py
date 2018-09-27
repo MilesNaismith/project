@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import csv
 
 def perekrestok_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
@@ -28,7 +29,10 @@ def perekrestok_parse(url,substitution=dict()):
                               'price': price
                                 }) 
     return products                                 
-change = {'Макароны Makfa Спагетти 500г': 'Спагетти Макфа',
+
+
+def main():
+    change = {'Макароны Makfa Спагетти 500г': 'Спагетти Макфа',
           'Макароны Makfa Перья 450г': 'Макароны Макфа',
           'Оливки Maestro de Oliva без косточки 300г':'Оливки зеленые',
           'Маслины Bonduelle Classique без косточки 300г' : 'Оливки черные',
@@ -38,21 +42,27 @@ change = {'Макароны Makfa Спагетти 500г': 'Спагетти М�
           'Сок Nar Гранатовый 1л':'Гранатовый сок'
            }    
 
-url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
+    url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
            'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
            'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=',   
           ]
-product_list =[]
+    product_list_perekrestok =[]
+    for url in url_list:
+        for page in range(1,20):
+            url_page = url + str(page)
+            product_list_perekrestok += perekrestok_parse(url_page,change)    
+    temp=[]
+    for item in product_list_perekrestok:
+        if item not in temp:
+            temp.append(item)
+    product_list_perekrestok = temp
+    with open('perekrestok.csv','w', encoding='utf-8') as f:
+        fields = ['title', 'price']
+        writer =csv.DictWriter(f,fields,delimiter =';')
+        writer.writeheader()
+        for item in product_list_perekrestok:
+            writer.writerow(item)
+    return product_list_perekrestok
 
-for url in url_list:
-    for page in range(1,20):
-        url_page = url + str(page)
-        product_list += perekrestok_parse(url_page,change)    
-for key in product_list:
-
-temp=[]
-for i in a:
-    if i not in temp:
-        temp.append(i)
-product_list = temp
-print(temp)   
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
-
+import csv
 def pager(url):
     browser = webdriver.PhantomJS()
     browser.get(url)
@@ -32,9 +32,11 @@ def metro_parse(url,substitution=dict()):
                 products.append({
                 'title': substitution[key],
                  'price': price
-                               }) 
+                               })                              
     return products                                 
-change = {'Вермишель MAKFA длинная спагетти, 500г': 'Спагетти Макфа',
+
+def main():
+    change = {'Вермишель MAKFA длинная спагетти, 500г': 'Спагетти Макфа',
           'Макароны MAKFA перья любительские, 450г': 'Макароны Макфа',
           'Оливки MAESTRO DE OLIVA без косточек, 300г':'Оливки зеленые',
           ' Оливки MAESTRO DE OLIVA супергигантские без косточек,  420г' : 'Оливки черные',
@@ -44,23 +46,28 @@ change = {'Вермишель MAKFA длинная спагетти, 500г': 'С
           'Сок SANTAL красный гранат, 1л':'Гранатовый сок'
            }    
 
-url_list =['https://msk.metro-cc.ru/category/produkty/bakaleya/makaronnye-izdeliya?price_range=11%3B1361&brands=&in_stock=1&attrs=&sorting=0&limit=72&virtual_stock=0',
+    url_list =['https://msk.metro-cc.ru/category/produkty/bakaleya/makaronnye-izdeliya?price_range=11%3B1361&brands=&in_stock=1&attrs=&sorting=0&limit=72&virtual_stock=0',
            'https://msk.metro-cc.ru/category/produkty/ovoschi-griby/101009003-konservirovannye?price_range=27%3B3397&brands=&in_stock=1&attrs=&attr%5B253%5D%5Bfrom%5D=0&attr%5B253%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',
            'https://msk.metro-cc.ru/category/produkty/holodnye-napitki/soki-morsy-nektary?price_range=15%3B1693&brands=&in_stock=1&attrs=&attr%5B181%5D%5Bfrom%5D=0&attr%5B181%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',   
           ]
-product_list =[]
 
+    product_list_metro =[]
+    for url in url_list:
+        for page in range(1,10):
+            url_page = url+'&page='+ str(page)
+            product_list_metro += metro_parse(url_page,change)         
+    temp=[]
+    for item in product_list_metro:
+        if item not in temp:
+            temp.append(item)
+    product_list_metro = temp
+    with open('metro.csv','w', encoding='utf-8') as f:
+        fields = ['title', 'price']
+        writer =csv.DictWriter(f,fields,delimiter =';')
+        writer.writeheader()
+        for item in product_list_metro:
+            writer.writerow(item)
+    
 
-
-
-
-for url in url_list:
-    for page in range(1,10):
-        url_page = url+'&page='+ str(page)
-        product_list += metro_parse(url_page,change)         
-temp=[]
-for i in a:
-    if i not in temp:
-        temp.append(i)
-product_list = temp
-print(temp)   
+if __name__ == "__main__":
+    main()

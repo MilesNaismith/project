@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import csv
 
-def auschan_parse(url,substitution=dict()):
+def auchan_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
     browser.get(url)
@@ -23,7 +24,9 @@ def auschan_parse(url,substitution=dict()):
                  'price': price
                                }) 
     return products                                 
-change = {'Спагетти-вермишель Makfa, 500г ': 'Спагетти Макфа',
+
+def main():
+    change = {'Спагетти-вермишель Makfa, 500г ': 'Спагетти Макфа',
           'Макаронные изделия Makfa, «Перья Любительские», 450г': 'Макароны Макфа',
           'Оливки Maestro de Oliva, без косточек, 300г':'Оливки зеленые',
           'Оливки GONZALEZ чёрные без косточек 425г' : 'Оливки черные',
@@ -33,12 +36,22 @@ change = {'Спагетти-вермишель Makfa, 500г ': 'Спагетти
           'Сок гранатовый Nar, 1 л':'Гранатовый сок'
            }    
 
-url_list =['https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
-           'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
-           'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
-           'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html'             
-          ]
-product_list =[]
-for url in url_list:
-    product_list += auschan_parse(url,change)         
-print(product_list)    
+    url_list = ['https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
+                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
+                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
+                'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html'             
+               ]
+
+    product_list_auchan = []
+    for url in url_list:
+        product_list_auchan += auchan_parse(url, change)         
+    
+    with open('auchan.csv','w', encoding='utf-8') as f:
+        fields = ['title', 'price']
+        writer =csv.DictWriter(f,fields,delimiter =';')
+        writer.writeheader()
+        for item in product_list_auchan:
+            writer.writerow(item)
+
+if __name__ == "__main__":   
+    main()    

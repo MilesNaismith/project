@@ -13,14 +13,14 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
 PROXY = {'proxy_url': 'socks5://t1.learn.python.ru:1080',
     'urllib3_proxy_kwargs': {'username': 'learn', 'password': 'python'}}
 
-def insertion(bot,update):
-    user_text = update.message.text.split()
-    user_text = ''.join(user_text)
-    user_list = user_text.split(',')
-    get_minimal_check(user_list)
+d
 
 def get_minimal_check(shopping_list):
-    pass
+    with open('text.txt', 'r', encoding='utf-8') as f:
+        for line in f:
+            price.append(line)
+            
+
 
 def main():
     mybot = Updater(API_TOKEN, request_kwargs=PROXY)

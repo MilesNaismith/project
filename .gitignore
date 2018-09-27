@@ -5,3 +5,4 @@ settings.py
 ./activate/*
 ./env/*
 *.log
+.vscode
