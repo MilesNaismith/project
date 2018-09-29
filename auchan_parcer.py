@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
 
-def auchan_parse(url,substitution=dict()):
+def auchan_parse(url, substitution):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
     browser.get(url)
@@ -24,24 +24,22 @@ def auchan_parse(url,substitution=dict()):
                  'price': price
                                }) 
     return products                                 
+def substitution():
+    product_list = dict()
+    with open('auchan_replace.csv', 'r', encoding='utf-8') as f:
+        fields =['name_old', 'name_new']
+        reader = csv.DictReader(f, fields, delimiter =';')
+        for row in reader:
+            product_list[row['name_old']] = row['name_new']
+    return product_list     
 
 def main():
-    change = {'Спагетти-вермишель Makfa, 500г ': 'Спагетти Макфа',
-          'Макаронные изделия Makfa, «Перья Любительские», 450г': 'Макароны Макфа',
-          'Оливки Maestro de Oliva, без косточек, 300г':'Оливки зеленые',
-          'Оливки GONZALEZ чёрные без косточек 425г' : 'Оливки черные',
-          'Зеленый горошек «6 соток», свежий, мозгового сорта, 400г': 'Горошек',
-          'Кукуруза «6 соток», сахарная, в зернах, 400г':'Кукуруза',
-          'Сок «Добрый» яблочный, 2 л.': 'Яблочный сок',
-          'Сок гранатовый Nar, 1 л':'Гранатовый сок'
-           }    
-
     url_list = ['https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
                 'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
                 'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
                 'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html'             
-               ]
-
+                   ]
+    change = substitution()
     product_list_auchan = []
     for url in url_list:
         product_list_auchan += auchan_parse(url, change)         
