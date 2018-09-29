@@ -19,13 +19,23 @@ def get_check(shopping_list, price_list):
 
 def get_added_products():
     product_list = []
-        with open('product_list.csv', 'r', encoding ='utf-8')as f:
-            fields = ['title']
-            reader = csv.reader(f, fields)
+    with open('product_list.csv', 'r', encoding ='utf-8') as f:
+        fields = ['title']
+        reader = csv.reader(f, fields)
         for row in reader:
             product_list.append(row)
-        return product_list
-        
+    return product_list
+
+def substitution(name):
+    file_name = name + '_replace.csv'
+    product_list = dict()
+    with open(file_name, 'r', encoding='utf-8') as f:
+        fields =['name_old', 'name_new']
+        reader = csv.DictReader(f, fields, delimiter =';')
+        for row in reader:
+            product_list[row['name_old']] = row['name_new']
+    return product_list     
+
 def main(shopping_list):
     print('запускаем основной скрипт')
     price_list_auchan = get_price('auchan')

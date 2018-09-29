@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
-
+import get_price
 def auchan_parse(url, substitution):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
@@ -23,15 +23,7 @@ def auchan_parse(url, substitution):
                 'title': substitution[key],
                  'price': price
                                }) 
-    return products                                 
-def substitution():
-    product_list = dict()
-    with open('auchan_replace.csv', 'r', encoding='utf-8') as f:
-        fields =['name_old', 'name_new']
-        reader = csv.DictReader(f, fields, delimiter =';')
-        for row in reader:
-            product_list[row['name_old']] = row['name_new']
-    return product_list     
+    return products
 
 def main():
     url_list = ['https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
@@ -39,7 +31,7 @@ def main():
                 'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
                 'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html'             
                    ]
-    change = substitution()
+    change = get_price.substitution('auchan')
     product_list_auchan = []
     for url in url_list:
         product_list_auchan += auchan_parse(url, change)         

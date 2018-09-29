@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
+import get_price
+
 def pager(url):
     browser = webdriver.PhantomJS()
     browser.get(url)
@@ -36,20 +38,12 @@ def metro_parse(url,substitution=dict()):
     return products                                 
 
 def main():
-    change = {'Вермишель MAKFA длинная спагетти, 500г': 'Спагетти Макфа',
-          'Макароны MAKFA перья любительские, 450г': 'Макароны Макфа',
-          'Оливки MAESTRO DE OLIVA без косточек, 300г':'Оливки зеленые',
-          ' Оливки MAESTRO DE OLIVA супергигантские без косточек,  420г' : 'Оливки черные',
-          'Зеленый горошек BONDUELLE Нежный, 400 г': 'Горошек',
-          'Кукуруза GLOBUS, 425мл':'Кукуруза',
-          'Сок ДОБРЫЙ Яблоко, 2л': 'Яблочный сок',
-          'Сок SANTAL красный гранат, 1л':'Гранатовый сок'
-           }    
+    change = change = get_price.substitution('metro')
 
     url_list =['https://msk.metro-cc.ru/category/produkty/bakaleya/makaronnye-izdeliya?price_range=11%3B1361&brands=&in_stock=1&attrs=&sorting=0&limit=72&virtual_stock=0',
-           'https://msk.metro-cc.ru/category/produkty/ovoschi-griby/101009003-konservirovannye?price_range=27%3B3397&brands=&in_stock=1&attrs=&attr%5B253%5D%5Bfrom%5D=0&attr%5B253%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',
-           'https://msk.metro-cc.ru/category/produkty/holodnye-napitki/soki-morsy-nektary?price_range=15%3B1693&brands=&in_stock=1&attrs=&attr%5B181%5D%5Bfrom%5D=0&attr%5B181%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',   
-          ]
+               'https://msk.metro-cc.ru/category/produkty/ovoschi-griby/101009003-konservirovannye?price_range=27%3B3397&brands=&in_stock=1&attrs=&attr%5B253%5D%5Bfrom%5D=0&attr%5B253%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/produkty/holodnye-napitki/soki-morsy-nektary?price_range=15%3B1693&brands=&in_stock=1&attrs=&attr%5B181%5D%5Bfrom%5D=0&attr%5B181%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',   
+              ]
 
     product_list_metro =[]
     for url in url_list:

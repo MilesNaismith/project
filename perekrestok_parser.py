@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
+import get_price
 
 def perekrestok_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
@@ -32,20 +33,12 @@ def perekrestok_parse(url,substitution=dict()):
 
 
 def main():
-    change = {'Макароны Makfa Спагетти 500г': 'Спагетти Макфа',
-          'Макароны Makfa Перья 450г': 'Макароны Макфа',
-          'Оливки Maestro de Oliva без косточки 300г':'Оливки зеленые',
-          'Маслины Bonduelle Classique без косточки 300г' : 'Оливки черные',
-          'Горошек 6 соток зеленый 400г': 'Горошек',
-          'Кукуруза 6 Соток сладкая 340г':'Кукуруза',
-          'Сок Добрый Яблочный 2л': 'Яблочный сок',
-          'Сок Nar Гранатовый 1л':'Гранатовый сок'
-           }    
+    change = change = get_price.substitution('perekrestok')    
 
     url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
-           'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
-           'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=',   
-          ]
+               'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
+               'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=',   
+              ]
     product_list_perekrestok =[]
     for url in url_list:
         for page in range(1,20):
