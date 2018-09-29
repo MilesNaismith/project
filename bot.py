@@ -16,20 +16,25 @@ PROXY = {'proxy_url': 'socks5://t1.learn.python.ru:1080',
 
 
 def insertion(bot, update):
-    product_list = ['Кукуруза', 'Яблочный сок', 'Горошек', 'Макароны Макфа', 'Спагетти Макфа']
+    product_list = get_price.get_added_products()
     shopping_list = update.message.text[7:].split(',')
     shopping_list = [x.strip() for x in shopping_list]
+    not_found_list = []
     for item in shopping_list:
         if not item in product_list:
-            text = item + ' не найден в базе, попробуйте заменить товар на аналогичный или написать более общее название'
-            update.message.reply_text(text)
-    print('обработал список')
-    text = get_price.main(shopping_list)
+            not_found_list.append(item)
+        print('обработал список')
+    if len(not_found_list) > 0:
+        not_found_string = ''
+        for item in not_found_list:
+            not_found_string += item + ', '
+        text = 'Часть товаров не найдена в базе, а именно: ' + not_found_string
+        text = get_price.main(shopping_list)
+    else:
+        text = get_price.main(shopping_list)
     print('вывод результата')
     update.message.reply_text(text)
             
-
-
 def main():
     mybot = Updater(API_TOKEN, request_kwargs=PROXY)
     dp = mybot.dispatcher

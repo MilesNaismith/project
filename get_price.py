@@ -17,15 +17,23 @@ def get_check(shopping_list, price_list):
             check += float(price_list[1][item])
     return price_list[0], round(check, 2)
 
-
+def get_added_products():
+    product_list = []
+        with open('product_list.csv', 'r', encoding ='utf-8')as f:
+            fields = ['title']
+            reader = csv.reader(f, fields)
+        for row in reader:
+            product_list.append(row)
+        return product_list
+        
 def main(shopping_list):
     print('запускаем основной скрипт')
     price_list_auchan = get_price('auchan')
     price_list_metro = get_price('metro')
     price_list_perekrestok = get_price('perekrestok')
-    check_auchan = get_check(shopping_list,price_list_auchan)
-    check_metro = get_check(shopping_list,price_list_metro)
-    check_perekrestok = get_check(shopping_list,price_list_perekrestok)
+    check_auchan = get_check(shopping_list, price_list_auchan)
+    check_metro = get_check(shopping_list, price_list_metro)
+    check_perekrestok = get_check(shopping_list, price_list_perekrestok)
     print('готовим результаты')
     return check_auchan, check_metro, check_perekrestok
 
