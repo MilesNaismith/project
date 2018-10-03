@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
-import get_price
+import core_shopping_list
 def auchan_parse(url, substitution):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
@@ -30,8 +30,8 @@ def main():
                 'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
                 'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
                 'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html'             
-                   ]
-    change = get_price.substitution('auchan')
+               ]
+    change = core_shopping_list.substitution('auchan')
     product_list_auchan = []
     for url in url_list:
         product_list_auchan += auchan_parse(url, change)         

@@ -3,7 +3,7 @@ import logging
 import telegram
 #from telegram import InlineQueryResultArticle, InputTextMessageContent, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from settings import API_TOKEN
-import get_price
+import core_shopping_list
 
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
@@ -16,7 +16,7 @@ PROXY = {'proxy_url': 'socks5://t1.learn.python.ru:1080',
 
 
 def insertion(bot, update):
-    product_list = get_price.get_added_products()
+    product_list = core_shopping_list.get_added_products()
     print('получил список добавленых продуктов')
     shopping_list = update.message.text[7:].split(',')
     shopping_list = [x.strip() for x in shopping_list]
@@ -32,9 +32,11 @@ def insertion(bot, update):
             not_found_string += item + ', '
         text = 'Часть товаров не найдена в базе, а именно: ' + not_found_string
     else:
-        text = get_price.main(shopping_list)
+        text = core_shopping_list.main(shopping_list)
     print('вывод результата')
     update.message.reply_text(text)
+
+
             
 def main():
     mybot = Updater(API_TOKEN, request_kwargs=PROXY)

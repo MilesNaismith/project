@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
-import get_price
+import core_shopping_list
 
 def pager(url):
     browser = webdriver.PhantomJS()
@@ -38,7 +38,7 @@ def metro_parse(url,substitution=dict()):
     return products                                 
 
 def main():
-    change = change = get_price.substitution('metro')
+    change = change = core_shopping_list.substitution('metro')
 
     url_list =['https://msk.metro-cc.ru/category/produkty/bakaleya/makaronnye-izdeliya?price_range=11%3B1361&brands=&in_stock=1&attrs=&sorting=0&limit=72&virtual_stock=0',
                'https://msk.metro-cc.ru/category/produkty/ovoschi-griby/101009003-konservirovannye?price_range=27%3B3397&brands=&in_stock=1&attrs=&attr%5B253%5D%5Bfrom%5D=0&attr%5B253%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',

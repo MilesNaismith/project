@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
-import get_price
+import core_shopping_list
 
 def perekrestok_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
@@ -33,7 +33,7 @@ def perekrestok_parse(url,substitution=dict()):
 
 
 def main():
-    change = change = get_price.substitution('perekrestok')    
+    change = change = core_shopping_list.substitution('perekrestok')    
 
     url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
                'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
