@@ -52,7 +52,6 @@ def main():
     with open('perekrestok.csv','w', encoding='utf-8') as f:
         fields = ['title', 'price']
         writer =csv.DictWriter(f,fields,delimiter =';')
-        writer.writeheader()
         for item in product_list_perekrestok:
             writer.writerow(item)
     return product_list_perekrestok

@@ -39,7 +39,6 @@ def main():
     with open('auchan.csv','w', encoding='utf-8') as f:
         fields = ['title', 'price']
         writer =csv.DictWriter(f,fields,delimiter =';')
-        writer.writeheader()
         for item in product_list_auchan:
             writer.writerow(item)
 
