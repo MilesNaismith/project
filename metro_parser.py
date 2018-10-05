@@ -3,15 +3,6 @@ from selenium import webdriver
 import csv
 import core_shopping_list
 
-def pager(url):
-    browser = webdriver.PhantomJS()
-    browser.get(url)
-    html = browser.page_source
-    soup = BeautifulSoup(html)
-    section = soup.find("div",{"class": "items"})
-    paginator = section.find("a",{"class": "_hide"})
-    return paginator
-
 def metro_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
