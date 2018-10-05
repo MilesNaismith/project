@@ -6,3 +6,4 @@ settings.py
 ./env/*
 *.log
 .vscode
+bot1.py
