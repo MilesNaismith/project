@@ -30,8 +30,8 @@ def table(bot,update):
                                    InlineKeyboardButton('Оливки черные', callback_data = 'Оливки черные'),
                                    InlineKeyboardButton('Макароны Макфа', callback_data = 'Макароны Макфа'),
                                    InlineKeyboardButton('Спагетти Макфа', callback_data = 'Спагетти Макфа'),
-                                   InlineKeyboardButton('Сок яблочный', callback_data = 'Сок яблочный'),
-                                   InlineKeyboardButton('Сок гранатовый', callback_data = 'Сок гранатовый'),
+                                   InlineKeyboardButton('Яблочный сок', callback_data = 'Яблочный сок'),
+                                   InlineKeyboardButton('Гранатовый сок', callback_data = 'Гранатовый сок'),
                                    InlineKeyboardButton('Готово', callback_data = 'Готово')
                                    ]
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//4))
@@ -48,7 +48,7 @@ def callbackHandler(bot, update):
         print(shopping_list)
     else:
         check = core_shopping_list.main(shopping_list)
-        text ='В Ашане покупки по данному списку обойдутся в {}руб., в Metro цена составит {}руб., а в перекрестке {}руб.'.format(check[0][1],check[1][1], check[2][1])
+        text ='В Ашане покупки по данному списку обойдутся в {}, в Metro цена составит {}, а в перекрестке {}'.format(check[0][1],check[1][1], check[2][1])
         shopping_list = []
         bot.send_message(chat_id=ID_CHAT, text=text)
         

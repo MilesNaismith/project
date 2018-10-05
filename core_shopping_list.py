@@ -13,24 +13,36 @@ def get_price(name):
     return name, price_list     
 '''
 def get_check_auchan(shopping_list):
+    print('считаем чек в ашане')
     check = 0
     for item in shopping_list:
         prod = Product.query.filter(Product.name==item).first()
-        check += float(prod.auchan_price)
+        try:
+            check += float(prod.auchan_price)
+        except ValueError:
+            return 'Metro', 'часть товаров отсутствует в магазине'
     return 'Auchan', round(check, 2)
 
 def get_check_metro(shopping_list):
+    print('считаем чек в metro')
     check = 0
     for item in shopping_list:
         prod = Product.query.filter(Product.name==item).first()
-        check += float(prod.metro_price)
+        try:
+            check += float(prod.metro_price)
+        except ValueError:
+            return 'Metro', 'часть товаров отсутствует в магазине'    
     return 'Metro', round(check, 2)    
 
 def get_check_perekrestok(shopping_list):
+    print('считаем чек в перекрестке')
     check = 0
     for item in shopping_list:
         prod = Product.query.filter(Product.name==item).first()
-        check += float(prod.perekrestok_price)
+        try:
+            check += float(prod.perekrestok_price)
+        except ValueError:
+            return 'Metro', 'часть товаров отсутствует'
     return 'Perekrestok', round(check, 2)    
 '''
 ###считает общий чек по одному магазину, при работе с БД надо переделать###
