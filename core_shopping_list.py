@@ -96,4 +96,4 @@ def main(shopping_list):
 
 
 if __name__ == "__main__":
-    main(shopping_list)
+    pass

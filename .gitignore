@@ -1,9 +1,8 @@
 *.pyc
 test_file.py
-bot.log
+*.log
 settings.py
 ./activate/*
 ./env/*
-*.log
 .vscode
 bot1.py
