@@ -31,10 +31,8 @@ def perekrestok_parse(url,substitution=dict()):
                                 }) 
     return products                                 
 
-
 def main():
     change = change = core_shopping_list.substitution('perekrestok')    
-
     url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
                'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
                'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=',   

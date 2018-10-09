@@ -2,6 +2,7 @@ import auchan_parcer
 import metro_parser
 import perekrestok_parser
 import db_from_csv
+
 def main():
     auchan_parcer.main()
     metro_parser.main()

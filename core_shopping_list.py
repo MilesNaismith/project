@@ -1,17 +1,8 @@
 import csv
 from db import db_session, Product
-'''
-###делает словарь с прайсом по одному магазину из name, не нужен при работе с БД###
-def get_price(name):
-    price_list =dict()
-    file_name = name + '.csv'
-    with open(file_name, 'r', encoding='utf-8') as f:
-        fields = ['title','price']
-        reader = csv.DictReader(f, fields, delimiter =';')
-        for row in reader:
-            price_list[row['title']] = row['price']
-    return name, price_list     
-'''
+import requests
+
+### Три однотипных функци, переделать в одну###
 def get_check_auchan(shopping_list):
     print('считаем чек в ашане')
     check = 0
@@ -44,15 +35,7 @@ def get_check_perekrestok(shopping_list):
         except ValueError:
             return 'Metro', 'часть товаров отсутствует'
     return 'Perekrestok', round(check, 2)    
-'''
-###считает общий чек по одному магазину, при работе с БД надо переделать###
-def get_check(shopping_list, price_list):
-    check = 0
-    for item in shopping_list:
-        if item in price_list[1]:
-            check += float(price_list[1][item])
-    return price_list[0], round(check, 2)
-'''
+
 ###Вытаскивам из .csv список продуктов, скоторыми умеем работать, оставлю так, ибо нагляднее###
 def get_added_products():
     product_list = []
@@ -73,26 +56,41 @@ def substitution(name):
         for row in reader:
             product_list[row['name_old']] = row['name_new']
     return product_list     
-'''
-###основная считалка-собиралка###
-def main(shopping_list):
-    print('запускаем основной скрипт')
-    price_list_auchan = get_price('auchan')
-    price_list_metro = get_price('metro')
-    price_list_perekrestok = get_price('perekrestok')
-    check_auchan = get_check(shopping_list, price_list_auchan)
-    check_metro = get_check(shopping_list, price_list_metro)
-    check_perekrestok = get_check(shopping_list, price_list_perekrestok)
-    print('готовим результаты')
-    return check_auchan, check_metro, check_perekrestok
-'''
+
+def list_to_string(shopping_list):
+    shopping_string = ''
+    for item in shopping_list:
+        shopping_string += item + ', '
+    return shopping_string[:-2]
+
+def ya_api(min_shop,my_coord,ya_api_key):
+    url = 'https://search-maps.yandex.ru/v1/?text={}&type=biz&results=5&ll={}&lang=ru_RU&apikey={}'.format(min_shop,my_coord,ya_api_key)
+    res  = requests.get(url)
+    tabs = res.json()
+    coord_list = []
+    for item in tabs['features']:
+        shop_coord = '{},{}'.format(item['geometry']['coordinates'][0],item['geometry']['coordinates'][1])
+        coord_list.append(shop_coord)
+    shop_coord_string =''
+    for coord in coord_list:
+        shop_coord_string +='~{},pm2gnm'.format(coord)
+    print(shop_coord_string)    
+    url = 'https://static-maps.yandex.ru/1.x/?ll={}&l=map&pt={},pm2blm{}'.format(my_coord,my_coord,shop_coord_string)
+    print(url)
+    res  = requests.get(url)
+    return(url)
+
 def main(shopping_list):
     print('запускаем основной скрипт')
     check_auchan = get_check_auchan(shopping_list)
     check_metro = get_check_metro(shopping_list)
     check_perekrestok = get_check_perekrestok(shopping_list)
+    min_check = min(check_auchan[1], check_metro[1], check_perekrestok[1])
+    for value in [check_auchan, check_metro, check_perekrestok]:
+        if min_check in value:
+            min_shop = value[0]
     print('готовим результаты')
-    return check_auchan, check_metro, check_perekrestok
+    return check_auchan, check_metro, check_perekrestok, min_shop
 
 
 if __name__ == "__main__":
