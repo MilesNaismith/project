@@ -34,7 +34,7 @@ def main():
     change = core_shopping_list.substitution('auchan')
     product_list_auchan = []
     for url in url_list:
-        product_list_auchan += auchan_parse(url, change)         
+        product_list_auchan.extend(auchan_parse(url, change))         
     
     with open('auchan.csv','w', encoding='utf-8') as f:
         fields = ['title', 'price']
