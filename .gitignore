@@ -6,4 +6,4 @@ settings.py
 ./env/*
 .vscode
 bot1.py
-*.db
+

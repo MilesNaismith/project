@@ -8,6 +8,8 @@ def get_check(shopping_list, shop):
         prod = Product.query.filter(Product.name==item).first() 
         try:
             if shop == 'Auchan':
+                print(shopping_list)
+                print(check)
                 check += float(prod.auchan_price)
             elif shop == 'Metro':
                 check += float(prod.metro_price)
