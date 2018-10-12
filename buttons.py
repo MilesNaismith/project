@@ -1,4 +1,3 @@
-# -*- condig: utf-8 -*-
 from telegram import InlineQueryResultArticle, InputTextMessageContent, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 import buttons
 
