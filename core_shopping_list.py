@@ -97,13 +97,23 @@ def ya_api(min_shop,my_coord,ya_api_key):
     print(url)
     res  = requests.get(url)
     return(url)
+def get_min_check(check1, check2, check3):
+    check_list = [check1, check2, check3]
+    check_end_list= []
+    for check in check_list:
+        try:
+            float(check)
+            check_end_list.append(check)
+        except:
+            pass
+    return min(check_end_list)
 
 def main(shopping_list):
     print('запускаем основной скрипт')
     check_auchan = get_check(shopping_list, 'Auchan')
     check_metro = get_check(shopping_list, 'Metro')
     check_perekrestok = get_check(shopping_list, 'Perekrestok')
-    min_check = min(check_auchan[1], check_metro[1], check_perekrestok[1])
+    min_check = get_min_check(check_auchan[1], check_metro[1], check_perekrestok[1])
     for value in [check_auchan, check_metro, check_perekrestok]:
         if min_check in value:
             min_shop = value[0]

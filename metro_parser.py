@@ -6,7 +6,7 @@ import core_shopping_list
 url_list =['https://msk.metro-cc.ru/category/produkty/bakaleya/makaronnye-izdeliya?price_range=11%3B1361&brands=&in_stock=1&attrs=&sorting=0&limit=72&virtual_stock=0',
                'https://msk.metro-cc.ru/category/produkty/ovoschi-griby/101009003-konservirovannye?price_range=27%3B3397&brands=&in_stock=1&attrs=&attr%5B253%5D%5Bfrom%5D=0&attr%5B253%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',
                'https://msk.metro-cc.ru/category/produkty/holodnye-napitki/soki-morsy-nektary?price_range=15%3B1693&brands=&in_stock=1&attrs=&attr%5B181%5D%5Bfrom%5D=0&attr%5B181%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',   
-              ]
+    ]
 
 def metro_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
