@@ -28,26 +28,34 @@ def table(bot, update, user_data):
     user_data['shopping_list'] = []
     user_data['ID_CHAT'] = update.message.chat_id
     button_list = buttons.category_list
-    reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//2))
+    reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//2),footer_buttons = buttons.footer_buttons_done)
     message_text = 'выбирайте продукты'
     bot.send_message(chat_id=user_data['ID_CHAT'], text=message_text, reply_markup=reply_markup, parse_mode='HTML')
 
-def callbackHandler(bot, update, user_data):    
-    inline_message_id = update['callback_query']['id']
+def callbackHandler(bot, update, user_data):
     user_data.setdefault('ID_CHAT',update['callback_query']['message']['chat']['id'])
     user_data.setdefault('shopping_list',[])
-    if update.callback_query.data in buttons.category_list1:
-        button_list = buttons.category[update.callback_query.data] 
-        reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//2,))
+    if update.callback_query.data in buttons.category_simple_list:
+        button_list = buttons.category[update.callback_query.data]
+        user_data['buton_list'] = button_list 
+        reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list),footer_buttons = buttons.footer_buttons_back))
         message_text = 'выбирайте продукты'
         bot.edit_message_text(chat_id=user_data['ID_CHAT'], message_id=update.callback_query.message.message_id, text=message_text, reply_markup=reply_markup, parse_mode='HTML')
     elif update.callback_query.data == 'Назад':
         button_list = buttons.category_list
-        reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//2,))
+        user_data['buton_list'] = button_list
+        reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//2,footer_buttons = buttons.footer_buttons_done))
         message_text = 'выбирайте продукты'
         bot.edit_message_text(chat_id=user_data['ID_CHAT'], message_id=update.callback_query.message.message_id, text=message_text, reply_markup=reply_markup, parse_mode='HTML')
     elif update.callback_query.data != 'Готово':
         user_data['shopping_list'].append(update.callback_query.data)
+        button_list = user_data['buton_list']
+        for button in button_list:
+            if button.callback_data == update.callback_query.data:
+                button.text = '{}✔'.format(update.callback_query.data)
+        reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//2,footer_buttons = buttons.footer_buttons_back))
+        message_text = 'выбирайте продукты'
+        bot.edit_message_text(chat_id=user_data['ID_CHAT'], message_id=update.callback_query.message.message_id, text=message_text, reply_markup=reply_markup, parse_mode='HTML')        
         print(user_data['shopping_list']) 
     elif update.callback_query.data == 'Готово':
         check = core_shopping_list.main(user_data['shopping_list'])

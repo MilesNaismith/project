@@ -1,10 +1,16 @@
 from telegram import InlineQueryResultArticle, InputTextMessageContent, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 import buttons
 
+footer_buttons_back = [
+    InlineKeyboardButton('**Назад**', callback_data = 'Назад')
+]
+
+footer_buttons_done = [
+    InlineKeyboardButton('**Готово**', callback_data = 'Готово')    
+]
 water_list = [
     InlineKeyboardButton('Яблочный сок', callback_data = 'Яблочный сок'),
     InlineKeyboardButton('Гранатовый сок', callback_data = 'Гранатовый сок'),
-    InlineKeyboardButton('Назад', callback_data = 'Назад')
 ]
 
 canned_food_list = [
@@ -12,20 +18,17 @@ canned_food_list = [
     InlineKeyboardButton('Маслины', callback_data = 'Маслины'),
     InlineKeyboardButton('Кукуруза', callback_data = 'Кукуруза'),
     InlineKeyboardButton('Горошек', callback_data = 'Горошек'),
-    InlineKeyboardButton('Назад', callback_data = 'Назад')
 ]
 
 pasta_list = [
     InlineKeyboardButton('Макароны Макфа', callback_data = 'Макароны Макфа'),
     InlineKeyboardButton('Спагетти Макфа', callback_data = 'Спагетти Макфа'),
-    InlineKeyboardButton('Назад', callback_data = 'Назад')    
 ]
 
 category_list = [
     InlineKeyboardButton('Соки', callback_data = 'Соки'),
     InlineKeyboardButton('Консервы', callback_data = 'Консервы'),
     InlineKeyboardButton('Бакалея', callback_data = 'Бакалея'),
-    InlineKeyboardButton('Готово', callback_data = 'Готово')    
 ]
 
 category = {
@@ -34,19 +37,15 @@ category = {
     'Бакалея' : buttons.pasta_list 
 }
 
-category_list1 = ['Соки','Консервы','Бакалея']
- item_list = [
+category_simple_list = ['Соки','Консервы','Бакалея']
+
+item_list = [
     'Макароны Макфа',
     'Спагетти Макфа',
-
-Маслины;119.00
-
-Оливки;119.00
-
-Горошек;77.90
-
-Кукуруза;77.90
-
-'Яблочный сок',
-'Гранатовый сок',
+    'Маслины',
+    'Оливки',
+    'Горошек',
+    'Кукуруза',
+    'Яблочный сок',
+    'Гранатовый сок',
  ]

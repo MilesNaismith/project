@@ -3,6 +3,11 @@ from selenium import webdriver
 import csv
 import core_shopping_list
 
+url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
+               'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
+               'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=',   
+              ]
+
 def perekrestok_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
@@ -33,10 +38,6 @@ def perekrestok_parse(url,substitution=dict()):
 
 def main():
     change = change = core_shopping_list.substitution('perekrestok')    
-    url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
-               'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
-               'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=',   
-              ]
     product_list_perekrestok =[]
     for url in url_list:
         for page in range(1,20):

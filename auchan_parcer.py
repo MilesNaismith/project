@@ -2,6 +2,12 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
 import core_shopping_list
+
+url_list = ['https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
+                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
+                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
+                'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html',             
+               ]
 def auchan_parse(url, substitution):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
@@ -26,11 +32,6 @@ def auchan_parse(url, substitution):
     return products
 
 def main():
-    url_list = ['https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
-                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
-                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
-                'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html'             
-               ]
     change = core_shopping_list.substitution('auchan')
     product_list_auchan = []
     for url in url_list:
