@@ -1,6 +1,7 @@
 import csv
-from db import db_session, Product
 import requests
+from db import db_session, Product
+
 def get_check(shopping_list, shop):
     print('считаем чек в {}'.format(shop))
     check = 0

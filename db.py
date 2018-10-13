@@ -11,7 +11,7 @@ Base.query = db_session.query_property()
 class Product(Base):
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True)
-    name = Column(String(100))
+    name = Column(String(100), unique=True)
     metro_price = Column(String(10))
     auchan_price = Column(String(10))
     perekrestok_price = Column(String(10))
