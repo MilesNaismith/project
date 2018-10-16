@@ -1,6 +1,6 @@
 from db import db_session, Product
 import csv
-
+#Не#
 def main():
     with open('metro.csv','r', encoding = 'utf-8') as f:
         fields = ['title', 'price']

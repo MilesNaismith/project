@@ -19,41 +19,7 @@ def get_check(shopping_list, shop):
         except ValueError:
             return shop, 'часть товаров отсутствует в магазине'
     return shop, round(check, 2)
-### Три однотипных функци, переделать в одну###
-'''
-def get_check_auchan(shopping_list):
-    print('считаем чек в ашане')
-    check = 0
-    for item in shopping_list:
-        prod = Product.query.filter(Product.name==item).first()
-        try:
-            check += float(prod.auchan_price)
-        except ValueError:
-            return 'Metro', 'часть товаров отсутствует в магазине'
-    return 'Auchan', round(check, 2)
 
-def get_check_metro(shopping_list):
-    print('считаем чек в metro')
-    check = 0
-    for item in shopping_list:
-        prod = Product.query.filter(Product.name==item).first()
-        try:
-            check += float(prod.metro_price)
-        except ValueError:
-            return 'Metro', 'часть товаров отсутствует в магазине'    
-    return 'Metro', round(check, 2)    
-
-def get_check_perekrestok(shopping_list):
-    print('считаем чек в перекрестке')
-    check = 0
-    for item in shopping_list:
-        prod = Product.query.filter(Product.name==item).first()
-        try:
-            check += float(prod.perekrestok_price)
-        except ValueError:
-            return 'Metro', 'часть товаров отсутствует'
-    return 'Perekrestok', round(check, 2)    
-'''
 ###Вытаскивам из .csv список продуктов, скоторыми умеем работать, оставлю так, ибо нагляднее###
 def get_added_products():
     product_list = []
@@ -74,12 +40,6 @@ def substitution(name):
         for row in reader:
             product_list[row['name_old']] = row['name_new']
     return product_list     
-
-def list_to_string(shopping_list):
-    shopping_string = ''
-    for item in shopping_list:
-        shopping_string += item + ', '
-    return shopping_string[:-2]
 
 def ya_api(min_shop,my_coord,ya_api_key):
     url = 'https://search-maps.yandex.ru/v1/?text={}&type=biz&results=3&ll={}&lang=ru_RU&apikey={}'.format(min_shop,my_coord,ya_api_key)

@@ -2,12 +2,14 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
 import core_shopping_list
+from db import db_session, Product
 
-url_list = ['https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
-                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
-                'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
-                'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html',             
-               ]
+url_list = [
+    'https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
+    'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
+    'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
+    'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html',             
+]
 def auchan_parse(url, substitution):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
     browser = webdriver.PhantomJS()
@@ -28,20 +30,26 @@ def auchan_parse(url, substitution):
                 products.append({
                 'title': substitution[key],
                  'price': price
-                               }) 
+                               })                 
     return products
 
 def main():
     change = core_shopping_list.substitution('auchan')
     product_list_auchan = []
     for url in url_list:
-        product_list_auchan.extend(auchan_parse(url, change))         
-    
+        product_list_auchan.extend(auchan_parse(url, change))    
+
+    product_list_auchan = [{'title': 'Маслины', 'price': '108'}, {'title': 'Оливки', 'price': '109'}]
+    for item in product_list_auchan:
+        prod = Product.query.filter(Product.name==item['title']).first()
+        prod.auchan_price = item['price']
+    db_session.commit()
+    '''
     with open('auchan.csv','w', encoding='utf-8') as f:
         fields = ['title', 'price']
         writer =csv.DictWriter(f,fields,delimiter =';')
         for item in product_list_auchan:
             writer.writerow(item)
-
+    '''
 if __name__ == "__main__":   
     main()    

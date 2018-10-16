@@ -2,10 +2,19 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import csv
 import core_shopping_list
+from db import db_session, Product
 
 url_list =['https://msk.metro-cc.ru/category/produkty/bakaleya/makaronnye-izdeliya?price_range=11%3B1361&brands=&in_stock=1&attrs=&sorting=0&limit=72&virtual_stock=0',
                'https://msk.metro-cc.ru/category/produkty/ovoschi-griby/101009003-konservirovannye?price_range=27%3B3397&brands=&in_stock=1&attrs=&attr%5B253%5D%5Bfrom%5D=0&attr%5B253%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',
-               'https://msk.metro-cc.ru/category/produkty/holodnye-napitki/soki-morsy-nektary?price_range=15%3B1693&brands=&in_stock=1&attrs=&attr%5B181%5D%5Bfrom%5D=0&attr%5B181%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',   
+               'https://msk.metro-cc.ru/category/produkty/holodnye-napitki/soki-morsy-nektary?price_range=15%3B1693&brands=&in_stock=1&attrs=&attr%5B181%5D%5Bfrom%5D=0&attr%5B181%5D%5Bto%5D=0&sorting=0&limit=72&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/produkty/sousy-pripravy/?price_range=14%3B2061&brands=&sorting=0&limit=72&in_stock=0&virtual_stock=0',  
+               'https://msk.metro-cc.ru/category/produkty/molochnye/?price_range=8%3B4201&brands=&sorting=0&limit=72&in_stock=0&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/produkty/hlebobulochnye-izdeliya/zamorozhennoe-testo-vypechka/?price_range=34%3B4916&brands=&attrs=&sorting=0&limit=72&in_stock=0&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/produkty/napitki/paketirovannyj-chaj/?price_range=12%3B7849&brands=&attrs=&attr%5B4%5D%5Bfrom%5D=0&attr%5B4%5D%5Bto%5D=0&sorting=0&limit=72&in_stock=0&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/produkty/syrnye/?price_range=18%3B5961&brands=&sorting=0&limit=72&in_stock=0&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/produkty/bakaleya/rastitelnoe-maslo/?price_range=54%3B13201&brands=&attrs=&sorting=0&limit=72&in_stock=0&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/produkty/bakaleya/krupy/?price_range=13%3B1701&brands=&attrs=&sorting=0&limit=72&in_stock=0&virtual_stock=0',
+               'https://msk.metro-cc.ru/category/kosmetika-bytovaya-himiya/gigienicheskie-prinadlezhnosti/bumazhnye-vatnye-izdeliya/?price_range=8%3B3353&brands=&attrs=&sorting=0&limit=72&in_stock=0&virtual_stock=0',
     ]
 
 def metro_parse(url,substitution=dict()):
@@ -24,7 +33,10 @@ def metro_parse(url,substitution=dict()):
         price_int_src = price_full.find("span",{"class":"int"})
         price_float_src = price_full.find("span",{"class":"float"})
         name = name_src.text
-        price = price_int_src.text + '.' + price_float_src.text
+        try:
+            price = price_int_src.text + '.' + price_float_src.text
+        except AttributeError:
+            price = None     
         for key in substitution:
             if name == key:
                 products.append({
@@ -45,11 +57,13 @@ def main():
         if item not in temp:
             temp.append(item)
     product_list_metro = temp
-    with open('metro.csv','w', encoding='utf-8') as f:
-        fields = ['title', 'price']
-        writer =csv.DictWriter(f,fields,delimiter =';')
-        for item in product_list_metro:
-            writer.writerow(item)
+    for item in product_list_metro:
+        prod = Product.query.filter(Product.name==item['title']).first()
+        try:
+            prod.metro_price = item['price']
+        except AttributeError:
+            pass    
+    db_session.commit()
     
 if __name__ == "__main__":
     main()
