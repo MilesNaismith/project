@@ -2,7 +2,6 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-
 engine = create_engine('sqlite:///products.db')
 db_session = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()

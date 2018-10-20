@@ -28,7 +28,6 @@ def table(bot, update, user_data):
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=len(button_list)//2),footer_buttons = buttons.footer_buttons_done)
     message_text = 'выбирайте продукты'
     update.message.reply_text(text=message_text, reply_markup=reply_markup)
-    #bot.send_message(chat_id=user_data['ID_CHAT'], text=message_text, reply_markup=reply_markup, parse_mode='HTML')
 
 def callbackHandler(bot, update, user_data):
     user_data.setdefault('ID_CHAT',update['callback_query']['message']['chat']['id'])
@@ -86,18 +85,22 @@ def callbackHandler(bot, update, user_data):
         )         
     elif update.callback_query.data == 'Готово':
         check = core_shopping_list.main(user_data['shopping_list'])
-        shopping_string = ', '.join(user_data['shopping_list'])[:-2]
-        text ='Список покупок: {} \nВ Ашане покупки по данному списку обойдутся в {}, в Metro цена составит {}, а в перекрестке {}'.format(shopping_string,check[0][1],check[1][1], check[2][1])
-        user_data['shopping_list'] = []
-        user_data['min_shop']= check[-1]
-        if user_data['min_shop'] == 'Auchan':
-            user_data['min_shop'] = 'Ашан'
-        elif user_data['min_shop'] == 'Metro':
-            user_data['min_shop'] = 'Metro Cash & Carry'        
-        elif user_data['min_shop'] == 'Perekrestok':
-            user_data['min_shop'] = 'Перекресток'  
-        bot.send_message(chat_id=user_data['ID_CHAT'], text=text)
-        geolocation(bot, update,user_data)
+        shopping_string = ', '.join(user_data['shopping_list']) + '\n'
+        try:
+            text ='Список покупок: \n{}Стоимость покупок \nВ Ашане {}\nВ Metro {}\nВ Перекрестке {}'.format(shopping_string,check[0][1],check[1][1], check[2][1]) 
+            user_data['shopping_list'] = []
+            user_data['min_shop']= check[-1]
+            if user_data['min_shop'] == 'Auchan':
+                user_data['min_shop'] = 'Ашан'
+            elif user_data['min_shop'] == 'Metro':
+                user_data['min_shop'] = 'Metro Cash & Carry'        
+            elif user_data['min_shop'] == 'Perekrestok':
+                user_data['min_shop'] = 'Перекресток' 
+            bot.send_message(chat_id=user_data['ID_CHAT'], text=text)
+            geolocation(bot, update,user_data)
+        except:
+            text = 'Данный товар отсутствует во всех магазинах'
+            bot.send_message(chat_id=user_data['ID_CHAT'], text=text) 
 
 def geolocation(bot, update,user_data):
     accept_keyboard = telegram.KeyboardButton(text='Показать', request_location=True)

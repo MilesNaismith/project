@@ -5,10 +5,17 @@ import core_shopping_list
 from db import db_session, Product
 
 url_list = [
-    'https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html',
-    'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html',
-    'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html',
-    'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html',             
+    'https://www.auchan.ru/pokupki/eda/bakaleja/makarony.html?p=',
+    'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/olivki.html?p=',
+    'https://www.auchan.ru/pokupki/eda/konservacija/ovoschnye-konservy/goroshek-konservirovanny.html?p=',
+    'https://www.auchan.ru/pokupki/eda/voda-i-napitki/soki-nektary.html?p=',
+    'https://www.auchan.ru/pokupki/eda/masla-sousy-zapravki/masla-rastitelnye/podsolnechnoe-maslo.html?p=',
+    'https://www.auchan.ru/pokupki/eda/bakaleja/krupy-boby/ris.html?p=',
+    'https://www.auchan.ru/pokupki/eda/masla-sousy-zapravki/ketchup-tomatnaya-pasta/klassicheskiy-ketchup.html?p=',
+    'https://www.auchan.ru/pokupki/eda/kofe-chai-sahar/chay/chernyj-chaj.html?p=',
+    'https://www.auchan.ru/pokupki/kosmetika/uhod-za-volosami/shampuni-bal-zamy-maski/bal-zam-dlja-volos.html?p=',
+    'https://www.auchan.ru/pokupki/kosmetika/sredstva-lichnoj-gigieny.html?p=',
+    'https://www.auchan.ru/pokupki/hoztovary/stirka-i-uhod-za-bel-em/sredstva-dlja-stirki.html?p=',
 ]
 def auchan_parse(url, substitution):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
@@ -37,19 +44,17 @@ def main():
     change = core_shopping_list.substitution('auchan')
     product_list_auchan = []
     for url in url_list:
+        for page in range(1,5):
+            url_page = url + str(page)
+            print(product_list_auchan)
         product_list_auchan.extend(auchan_parse(url, change))    
-
-    product_list_auchan = [{'title': 'Маслины', 'price': '108'}, {'title': 'Оливки', 'price': '109'}]
     for item in product_list_auchan:
         prod = Product.query.filter(Product.name==item['title']).first()
-        prod.auchan_price = item['price']
+        try:
+            prod.auchan_price = item['price']
+        except:
+            pass
     db_session.commit()
-    '''
-    with open('auchan.csv','w', encoding='utf-8') as f:
-        fields = ['title', 'price']
-        writer =csv.DictWriter(f,fields,delimiter =';')
-        for item in product_list_auchan:
-            writer.writerow(item)
-    '''
+
 if __name__ == "__main__":   
     main()    

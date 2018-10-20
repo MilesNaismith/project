@@ -4,20 +4,21 @@ import csv
 import core_shopping_list
 from db import db_session, Product
 
-url_list =['https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
-               'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
-               'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=', 
-               'https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/slivochnoe-maslo-i-margarin?page=',
-               'https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/moloko?page=',
-               'https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/krupy-i-bobovye?page=',
-               'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/tomatnye-pasty-ketchup?page=',
-               'https://www.perekrestok.ru/catalog/zamorojennye-produkty/polufabrikaty?page=',
-               'https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/maslo-rastitelnoe?page=',
-               'https://www.perekrestok.ru/catalog/kofe-chay-sahar/chay?page=',
-               'https://www.perekrestok.ru/catalog/krasota-gigiena-bytovaya-himiya/uhod-za-volosami/shampuni-i-sredstva-dlya-uhoda-posle-mytya?page=',
-               'https://www.perekrestok.ru/catalog/krasota-gigiena-bytovaya-himiya/tualetnaya-bumaga?page=',
-               'https://www.perekrestok.ru/catalog/krasota-gigiena-bytovaya-himiya/stirka-i-uhod-za-belem?page=',
-              ]
+url_list =[
+    'https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/makaronnye-izdeliya?page=',
+    'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/ovoschnye-konservy?page=',
+    'https://www.perekrestok.ru/catalog/soki-vody-napitki/soki-nektary?page=', 
+    'https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/slivochnoe-maslo-i-margarin?page=',
+    'https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/moloko?page=',
+    'https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/krupy-i-bobovye?page=',
+    'https://www.perekrestok.ru/catalog/konservy-orehi-sousy/tomatnye-pasty-ketchup?page=',
+    'https://www.perekrestok.ru/catalog/zamorojennye-produkty/polufabrikaty?page=',
+    'https://www.perekrestok.ru/catalog/makarony-krupy-spetsii/maslo-rastitelnoe?page=',
+    'https://www.perekrestok.ru/catalog/kofe-chay-sahar/chay?page=',
+    'https://www.perekrestok.ru/catalog/krasota-gigiena-bytovaya-himiya/uhod-za-volosami/shampuni-i-sredstva-dlya-uhoda-posle-mytya?page=',
+    'https://www.perekrestok.ru/catalog/krasota-gigiena-bytovaya-himiya/tualetnaya-bumaga?page=',
+    'https://www.perekrestok.ru/catalog/krasota-gigiena-bytovaya-himiya/stirka-i-uhod-za-belem?page=',
+]
 
 def perekrestok_parse(url,substitution=dict()):
     ### Внимание! Функция парсит только Первую страницу каждого урла ###
@@ -39,7 +40,7 @@ def perekrestok_parse(url,substitution=dict()):
                 price_float_src = price_full.find("span",{"class":"xf-price__penny"})
                 price = price_int_src.text + '.' + price_float_src.text[price_float_src.text.find(',')+1:price_float_src.text.find(',')+3]
             except AttributeError:
-                price = None    
+                price = NULL    
         name = name_src.get('title')
         
         for key in substitution:
@@ -70,6 +71,5 @@ def main():
             pass    
     db_session.commit()
     
-
 if __name__ == "__main__":
     main()

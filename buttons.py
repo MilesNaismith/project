@@ -40,6 +40,7 @@ category_list = [
     InlineKeyboardButton('Напитки', callback_data = 'Напитки'),
     InlineKeyboardButton('Консервы', callback_data = 'Консервы'),
     InlineKeyboardButton('Бакалея', callback_data = 'Бакалея'),
+    InlineKeyboardButton('Хозтовары', callback_data = 'Хозтовары'),
 ]
 
 category = {
@@ -69,4 +70,5 @@ item_list = [
     'Чай',
     'Шампунь',
     'Гель для стирки',
+    'Туалетная бумага',
  ]

@@ -7,6 +7,5 @@ def main():
     metro_parser.main()
     perekrestok_parser.main()
     
-
 if __name__ == "__main__":   
     main()        
