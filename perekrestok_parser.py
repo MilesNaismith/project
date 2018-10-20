@@ -40,7 +40,7 @@ def perekrestok_parse(url,substitution=dict()):
                 price_float_src = price_full.find("span",{"class":"xf-price__penny"})
                 price = price_int_src.text + '.' + price_float_src.text[price_float_src.text.find(',')+1:price_float_src.text.find(',')+3]
             except AttributeError:
-                price = NULL    
+                price = 'нет в наличии'    
         name = name_src.get('title')
         
         for key in substitution:
