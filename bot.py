@@ -22,7 +22,6 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     return menu    
 
 def table(bot, update, user_data): 
-    print(update)
     user_data['shopping_list'] = []
     button_list = buttons.category_list
     reply_markup = InlineKeyboardMarkup(build_menu(
@@ -31,7 +30,12 @@ def table(bot, update, user_data):
         footer_buttons = buttons.footer_buttons_done
     )
     message_text = 'выбирайте продукты'
-    update.message.reply_text(text=message_text, reply_markup=reply_markup)
+    bot.send_message(
+        chat_id = update.message.chat_id,
+        message_id = update.message.message_id,
+        text=message_text, 
+        reply_markup=reply_markup
+    )
 
 def callbackHandler(bot, update, user_data):
     user_data.setdefault('shopping_list',[])
@@ -68,11 +72,16 @@ def callbackHandler(bot, update, user_data):
             parse_mode='HTML'
         )
     elif update.callback_query.data != 'Готово':
-        user_data['shopping_list'].append(update.callback_query.data)
         button_list = user_data['button_list']
         for button in button_list:
             if button.callback_data == update.callback_query.data:
-                button.text = '{} ✔'.format(update.callback_query.data)
+                if button.text[-1] == '✔':
+                    button.text = update.callback_query.data   
+                    user_data['shopping_list'].remove(update.callback_query.data)
+                else:
+                    button.text = '{} ✔'.format(update.callback_query.data)
+                    user_data['shopping_list'].append(update.callback_query.data)
+            
         reply_markup = InlineKeyboardMarkup(build_menu(
             button_list, 
             n_cols=len(button_list)//2,
@@ -104,10 +113,8 @@ def callbackHandler(bot, update, user_data):
             elif user_data['min_shop'] == 'Perekrestok':
                 user_data['min_shop'] = 'Перекресток' 
             update.callback_query.message.reply_text(text=text) 
-            print(update)
             geolocation(bot, update,user_data)
         except Exception as e:
-            print(e)
             text = 'Данный товар отсутствует во всех магазинах' 
             update.callback_query.message.reply_text(text=text) 
 
