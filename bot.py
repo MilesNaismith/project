@@ -6,6 +6,7 @@ from settings import API_TOKEN, YA_API_KEY, PROXY
 import core_shopping_list
 import buttons
 import codecs
+import copy
 #import requests
 
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
@@ -22,8 +23,10 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     return menu    
 
 def table(bot, update, user_data): 
-    user_data['shopping_list'] = []
-    button_list = buttons.category_list
+    print(user_data.get('button_list'))
+    user_data['category_list'] = copy.deepcopy(buttons.category_list)
+    user_data['category'] = copy.deepcopy(buttons.category)
+    button_list = user_data['category_list']
     reply_markup = InlineKeyboardMarkup(build_menu(
         button_list,
         n_cols=len(button_list)//2), 
@@ -40,7 +43,7 @@ def table(bot, update, user_data):
 def callbackHandler(bot, update, user_data):
     user_data.setdefault('shopping_list',[])
     if update.callback_query.data in buttons.category_simple_list:
-        button_list = buttons.category[update.callback_query.data]
+        button_list = user_data['category'][update.callback_query.data]
         user_data['button_list'] = button_list 
         reply_markup = InlineKeyboardMarkup(build_menu(
             button_list, 
@@ -56,8 +59,7 @@ def callbackHandler(bot, update, user_data):
             parse_mode='HTML'
         )
     elif update.callback_query.data == 'Назад':
-        button_list = buttons.category_list
-        user_data['button_list'] = button_list
+        button_list = user_data['category_list']
         reply_markup = InlineKeyboardMarkup(build_menu(
             button_list, 
             n_cols=len(button_list)//2,
@@ -75,7 +77,7 @@ def callbackHandler(bot, update, user_data):
         button_list = user_data['button_list']
         for button in button_list:
             if button.callback_data == update.callback_query.data:
-                if button.text[-1] == '✔':
+                if button.text.endswith('✔'):
                     button.text = update.callback_query.data   
                     user_data['shopping_list'].remove(update.callback_query.data)
                 else:
@@ -114,6 +116,7 @@ def callbackHandler(bot, update, user_data):
                 user_data['min_shop'] = 'Перекресток' 
             update.callback_query.message.reply_text(text=text) 
             geolocation(bot, update,user_data)
+            user_data = None
         except Exception as e:
             text = 'Данный товар отсутствует во всех магазинах' 
             update.callback_query.message.reply_text(text=text) 
